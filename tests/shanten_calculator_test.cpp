@@ -12,9 +12,9 @@ TEST(CalcShantenTest, ClosedHand)
       1, 0, 1, 0, 3, 0, 0        // jihai
   };
 
-  const auto sht = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
 
-  EXPECT_EQ(sht, 2);
+  EXPECT_EQ(shanten, 2);
 }
 
 TEST(CalcShantenTest, InsufficientBlocks)
@@ -27,9 +27,9 @@ TEST(CalcShantenTest, InsufficientBlocks)
       4, 4, 3, 3, 0, 0, 0        // jihai
   };
 
-  const auto sht = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
 
-  EXPECT_EQ(sht, 1);
+  EXPECT_EQ(shanten, 1);
 }
 
 TEST(CalcShantenTest, OpenHand1)
@@ -46,9 +46,9 @@ TEST(CalcShantenTest, OpenHand1)
 
   tile_limits[1] = 0; // 2m
 
-  const auto sht = calc_shanten(hand, tile_limits, make_deltas(), 3, false);
+  const auto shanten = calc_shanten(hand, tile_limits, make_deltas(), 3, false);
 
-  EXPECT_EQ(sht, 1);
+  EXPECT_EQ(shanten, 1);
 }
 
 TEST(CalcShantenTest, OpenHand2)
@@ -67,9 +67,9 @@ TEST(CalcShantenTest, OpenHand2)
   tile_limits[17] = 1; // 9p
   tile_limits[26] = 1; // 9s
 
-  const auto sht = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
+  const auto shanten = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
 
-  EXPECT_EQ(sht, 2);
+  EXPECT_EQ(shanten, 2);
 }
 
 TEST(CalcShantenTest, OpenHand3)
@@ -88,9 +88,9 @@ TEST(CalcShantenTest, OpenHand3)
   tile_limits[32] = 1; // 6z
   tile_limits[31] = 1; // 5z
 
-  const auto sht = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
+  const auto shanten = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
 
-  EXPECT_EQ(sht, 2);
+  EXPECT_EQ(shanten, 2);
 }
 
 TEST(CalcShantenTest, OpenHand4)
@@ -109,7 +109,7 @@ TEST(CalcShantenTest, OpenHand4)
   tile_limits[29] = 1; // 3z
   tile_limits[32] = 1; // 6z
 
-  const auto sht = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
+  const auto shanten = calc_shanten(hand, tile_limits, make_deltas(), 1, false);
 
-  EXPECT_EQ(sht, 2);
+  EXPECT_EQ(shanten, 2);
 }
