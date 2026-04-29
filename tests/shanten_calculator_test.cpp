@@ -17,7 +17,7 @@ TEST(CalcShantenTest, ClosedHand)
   EXPECT_EQ(shanten, 2);
 }
 
-TEST(CalcShantenTest, InsufficientBlocks)
+TEST(CalcShantenTest, InsufficientBlocks4433)
 {
   // 11112222333444z
   std::array<int, NUM_TIDS> hand = {
@@ -30,6 +30,96 @@ TEST(CalcShantenTest, InsufficientBlocks)
   const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
 
   EXPECT_EQ(shanten, 1);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4442i)
+{
+  // 11m111122223333z
+  std::array<int, NUM_TIDS> hand = {
+      2, 0, 0, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 4, 4, 0, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 2);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4442ii)
+{
+  // 23m111122223333z
+  std::array<int, NUM_TIDS> hand = {
+      0, 1, 1, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 4, 4, 0, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 2);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4333)
+{
+  // 1111222333444z
+  std::array<int, NUM_TIDS> hand = {
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 3, 3, 3, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 1);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4432i)
+{
+  // 11m11112222333z
+  std::array<int, NUM_TIDS> hand = {
+      2, 0, 0, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 4, 3, 0, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 2);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4432ii)
+{
+  // 23m11112222333z
+  std::array<int, NUM_TIDS> hand = {
+      0, 1, 1, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 4, 3, 0, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 2);
+}
+
+TEST(CalcShantenTest, InsufficientBlocks4441)
+{
+  // 1111222233334z
+  std::array<int, NUM_TIDS> hand = {
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // manzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      4, 4, 4, 1, 0, 0, 0        // jihai
+  };
+
+  const auto shanten = calc_shanten(hand, make_tile_limits(), make_deltas(), 4, false);
+
+  EXPECT_EQ(shanten, 3);
 }
 
 TEST(CalcShantenTest, OpenHand1)
