@@ -2,7 +2,7 @@
 #include <mahjong/experimental/shanten_calculator.hpp>
 using namespace mahjong::experimental;
 
-TEST(CalshtTest, ClosedHand)
+TEST(CalcShantenTest, ClosedHand)
 {
   // 123m245779p13555z
   std::array<int, NUM_TIDS> hand = {
@@ -17,7 +17,7 @@ TEST(CalshtTest, ClosedHand)
   EXPECT_EQ(sht, 2);
 }
 
-TEST(CalshtTest, InsufficientBlocks)
+TEST(CalcShantenTest, InsufficientBlocks)
 {
   // 11112222333444z
   std::array<int, NUM_TIDS> hand = {
@@ -32,7 +32,7 @@ TEST(CalshtTest, InsufficientBlocks)
   EXPECT_EQ(sht, 1);
 }
 
-TEST(CalshtTest, OpenHand1)
+TEST(CalcShantenTest, OpenHand1)
 {
   // 13m123456p11s[[2222m]]
   std::array<int, NUM_TIDS> hand = {
@@ -51,7 +51,7 @@ TEST(CalshtTest, OpenHand1)
   EXPECT_EQ(sht, 1);
 }
 
-TEST(CalshtTest, OpenHand2)
+TEST(CalcShantenTest, OpenHand2)
 {
   // 9m9p569s[999m][999p][999s]
   std::array<int, NUM_TIDS> hand = {
@@ -72,7 +72,7 @@ TEST(CalshtTest, OpenHand2)
   EXPECT_EQ(sht, 2);
 }
 
-TEST(CalshtTest, OpenHand3)
+TEST(CalcShantenTest, OpenHand3)
 {
   // 11567z[777z][666z][555z]
   std::array<int, NUM_TIDS> hand = {
@@ -93,7 +93,7 @@ TEST(CalshtTest, OpenHand3)
   EXPECT_EQ(sht, 2);
 }
 
-TEST(CalshtTest, OpenHand4)
+TEST(CalcShantenTest, OpenHand4)
 {
   // 13556z[111z][333z][666z]
   std::array<int, NUM_TIDS> hand = {
