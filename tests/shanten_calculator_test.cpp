@@ -2,6 +2,43 @@
 #include <mahjong/experimental/shanten_calculator.hpp>
 using namespace mahjong::experimental;
 
+namespace {
+  constexpr int m1 = 0;
+  constexpr int m2 = 1;
+  constexpr int m3 = 2;
+  constexpr int m4 = 3;
+  constexpr int m5 = 4;
+  constexpr int m6 = 5;
+  constexpr int m7 = 6;
+  constexpr int m8 = 7;
+  constexpr int m9 = 8;
+  constexpr int p1 = 9;
+  constexpr int p2 = 10;
+  constexpr int p3 = 11;
+  constexpr int p4 = 12;
+  constexpr int p5 = 13;
+  constexpr int p6 = 14;
+  constexpr int p7 = 15;
+  constexpr int p8 = 16;
+  constexpr int p9 = 17;
+  constexpr int s1 = 18;
+  constexpr int s2 = 19;
+  constexpr int s3 = 20;
+  constexpr int s4 = 21;
+  constexpr int s5 = 22;
+  constexpr int s6 = 23;
+  constexpr int s7 = 24;
+  constexpr int s8 = 25;
+  constexpr int s9 = 26;
+  constexpr int z1 = 27;
+  constexpr int z2 = 28;
+  constexpr int z3 = 29;
+  constexpr int z4 = 30;
+  constexpr int z5 = 31;
+  constexpr int z6 = 32;
+  constexpr int z7 = 33;
+}
+
 class CalcShantenTest : public ::testing::Test {
 protected:
   CalcShantenTest() : deltas(make_deltas()) {}
@@ -141,7 +178,7 @@ TEST_F(CalcShantenTest, OpenHand1)
 
   auto tile_limits = make_tile_limits();
 
-  tile_limits[1] = 0; // 2m
+  tile_limits[m2] = 0; // 2m
 
   const auto shanten = calc_shanten(hand, tile_limits, deltas, 3, false);
 
@@ -160,9 +197,9 @@ TEST_F(CalcShantenTest, OpenHand2)
 
   auto tile_limits = make_tile_limits();
 
-  tile_limits[8] = 1;  // 9m
-  tile_limits[17] = 1; // 9p
-  tile_limits[26] = 1; // 9s
+  tile_limits[m9] = 1;
+  tile_limits[p9] = 1;
+  tile_limits[s9] = 1;
 
   const auto shanten = calc_shanten(hand, tile_limits, deltas, 1, false);
 
@@ -181,9 +218,9 @@ TEST_F(CalcShantenTest, OpenHand3)
 
   auto tile_limits = make_tile_limits();
 
-  tile_limits[33] = 1; // 7z
-  tile_limits[32] = 1; // 6z
-  tile_limits[31] = 1; // 5z
+  tile_limits[z7] = 1;
+  tile_limits[z6] = 1;
+  tile_limits[z5] = 1;
 
   const auto shanten = calc_shanten(hand, tile_limits, deltas, 1, false);
 
@@ -202,9 +239,9 @@ TEST_F(CalcShantenTest, OpenHand4)
 
   auto tile_limits = make_tile_limits();
 
-  tile_limits[27] = 1; // 1z
-  tile_limits[29] = 1; // 3z
-  tile_limits[32] = 1; // 6z
+  tile_limits[z1] = 1;
+  tile_limits[z3] = 1;
+  tile_limits[z6] = 1;
 
   const auto shanten = calc_shanten(hand, tile_limits, deltas, 1, false);
 
