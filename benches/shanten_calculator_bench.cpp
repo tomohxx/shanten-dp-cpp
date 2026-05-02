@@ -19,12 +19,6 @@ const auto& make_tile_limits()
   return tile_limits;
 }
 
-const auto& make_deltas()
-{
-  static const auto deltas = me::make_deltas();
-  return deltas;
-}
-
 void read(std::vector<Record>& dataset, const std::filesystem::path& path)
 {
   std::ifstream fin(path);
@@ -50,10 +44,9 @@ void read(std::vector<Record>& dataset, const std::filesystem::path& path)
 void verify(const std::vector<Record>& dataset)
 {
   const auto& tile_limits = make_tile_limits();
-  const auto& deltas = make_deltas();
 
   for (const auto& [hand, standard, seven_pairs, thirteen_orphans] : dataset) {
-    if (me::standard::calc_shanten(hand, tile_limits, deltas, NUM_TILES / 3) != standard) {
+    if (me::standard::calc_shanten(hand, tile_limits, NUM_TILES / 3) != standard) {
       throw std::runtime_error("standard::calc_shanten validation failed");
     }
 
@@ -98,13 +91,12 @@ void BM_CalcShanten(benchmark::State& state)
 {
   const auto& dataset = get_dataset(static_cast<std::size_t>(state.range(0)));
   const auto& tile_limits = make_tile_limits();
-  const auto& deltas = make_deltas();
 
   for (auto _ : state) {
     for (const auto& record : dataset) {
       const auto& hand = std::get<0>(record);
 
-      benchmark::DoNotOptimize(me::standard::calc_shanten(hand, tile_limits, deltas, NUM_TILES / 3));
+      benchmark::DoNotOptimize(me::standard::calc_shanten(hand, tile_limits, NUM_TILES / 3));
       benchmark::DoNotOptimize(me::seven_pairs::calc_shanten(hand, tile_limits));
       benchmark::DoNotOptimize(me::thirteen_orphans::calc_shanten(hand, tile_limits));
     }

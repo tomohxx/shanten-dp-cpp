@@ -33,7 +33,7 @@ cmake --install build
 
 ## Usage
 
-For `calc_shanten(hand, tile_limits, deltas, m, check_hand)`, `m` is the number of meld blocks that still need to be formed.
+For `calc_shanten(hand, tile_limits, m, check_hand)`, `m` is the number of meld blocks that still need to be formed.
 
 ### Examples
 

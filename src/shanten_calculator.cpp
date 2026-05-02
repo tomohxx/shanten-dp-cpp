@@ -3,6 +3,7 @@
 #include <format>
 #include <mahjong/experimental/shanten_calculator.hpp>
 #include <stdexcept>
+#include <vector>
 
 namespace mahjong::experimental {
   constexpr int8_t MAX_SHT = 14;
@@ -18,11 +19,22 @@ namespace mahjong::experimental {
   }
 
   namespace standard {
+    struct Delta {
+      int a;
+      int b;
+      int c;
+      int h;
+      int m;
+    };
+
+    std::array<std::vector<Delta>, NUM_TIDS> make_deltas();
+
     int calc_shanten(const std::array<int, NUM_TIDS>& hand,
                      const std::array<int, NUM_TIDS + 1>& tile_limits,
-                     const std::array<std::vector<Delta>, NUM_TIDS>& deltas,
                      const int m)
     {
+      static const auto deltas = make_deltas();
+
       using std::array;
 
       array<array<array<array<array<int8_t, 5>, 2>, 5>, 5>, NUM_TIDS + 1> table;
@@ -121,7 +133,6 @@ namespace mahjong::experimental {
 
   int calc_shanten(const std::array<int, NUM_TIDS>& hand,
                    const std::array<int, NUM_TIDS + 1>& tile_limits,
-                   const std::array<std::vector<standard::Delta>, NUM_TIDS>& deltas,
                    const int m,
                    const bool check_hand)
   {
@@ -146,7 +157,7 @@ namespace mahjong::experimental {
     auto ret = MAX_SHT;
 
     {
-      const auto sht = standard::calc_shanten(hand, tile_limits, deltas, m);
+      const auto sht = standard::calc_shanten(hand, tile_limits, m);
 
       chmin(ret, sht);
     }
@@ -179,7 +190,7 @@ namespace mahjong::experimental {
     return tile_limits;
   }
 
-  std::array<std::vector<standard::Delta>, NUM_TIDS> make_deltas()
+  std::array<std::vector<standard::Delta>, NUM_TIDS> standard::make_deltas()
   {
     static const std::vector<standard::Delta> deltas_with_seq = {
         {0, 0, 0, 0, 0},
