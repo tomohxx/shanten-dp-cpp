@@ -141,9 +141,7 @@ namespace mahjong::experimental {
         if (hand[i] < 0 || hand[i] > 4) {
           throw std::invalid_argument(std::format("Invalid number of hand's tiles at {}: {}", i, hand[i]));
         }
-      }
 
-      for (int i = 0; i < NUM_TIDS; ++i) {
         if (tile_limits[i] < 0 || tile_limits[i] > 4 || hand[i] > tile_limits[i]) {
           throw std::invalid_argument(std::format("Invalid number of tile_limits' at {}: {}", i, tile_limits[i]));
         }
