@@ -157,21 +157,15 @@ namespace mahjong::experimental {
     auto ret = MAX_SHT;
 
     {
-      const auto sht = standard::calc_shanten(hand, tile_limits, m);
-
-      chmin(ret, sht);
+      chmin(ret, standard::calc_shanten(hand, tile_limits, m));
     }
 
     if (m == 4) {
-      const auto sht = seven_pairs::calc_shanten(hand, tile_limits);
-
-      chmin(ret, sht);
+      chmin(ret, seven_pairs::calc_shanten(hand, tile_limits));
     }
 
     if (m == 4) {
-      const auto sht = thirteen_orphans::calc_shanten(hand, tile_limits);
-
-      chmin(ret, sht);
+      chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
     }
 
     return ret;
