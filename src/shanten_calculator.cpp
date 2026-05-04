@@ -47,7 +47,7 @@ namespace mahjong::experimental {
           for (int b = 0; b <= tile_limits[n + 1]; ++b) {
             for (int h = 0; h <= 1; ++h) {
               for (int mm = 0; mm <= m; ++mm) {
-                auto& current = table[n][a][b][h][mm];
+                const auto& current = table[n][a][b][h][mm];
 
                 if (current == MAX_SHT) continue;
 
@@ -83,7 +83,7 @@ namespace mahjong::experimental {
 
       for (int n = 0; n < NUM_TIDS; ++n) {
         for (int p = 0; p <= 7; ++p) {
-          auto& current = table[n][p];
+          const auto& current = table[n][p];
 
           if (current == MAX_SHT) continue;
 
@@ -113,7 +113,7 @@ namespace mahjong::experimental {
 
       for (int n = 0; n < 13; ++n) {
         for (int p = 0; p <= 1; ++p) {
-          auto& current = table[n][p];
+          const auto& current = table[n][p];
 
           if (current == MAX_SHT) continue;
 
