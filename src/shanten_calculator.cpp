@@ -154,15 +154,10 @@ namespace mahjong::experimental {
 
     auto ret = MAX_SHT;
 
-    {
-      chmin(ret, standard::calc_shanten(hand, tile_limits, m));
-    }
+    chmin(ret, standard::calc_shanten(hand, tile_limits, m));
 
     if (m == 4) {
       chmin(ret, seven_pairs::calc_shanten(hand, tile_limits));
-    }
-
-    if (m == 4) {
       chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
     }
 
