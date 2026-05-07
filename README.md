@@ -1,6 +1,6 @@
 # Shanten DP CPP
 
-A C++ implementation of the Shanten calculation algorithm using dynamic programming.
+C++ implementation of the Shanten calculation algorithm using dynamic programming.
 
 ## Overview
 
