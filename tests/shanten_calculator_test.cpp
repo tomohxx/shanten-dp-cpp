@@ -90,6 +90,25 @@ TEST(CalcShantenTest, ClosedHand)
   EXPECT_EQ(shanten, 2);
 }
 
+TEST(CalcShantenTest, CannotWin)
+{
+  // 123m245779p13555z
+  std::array<int, NUM_TIDS> hand = {
+      1, 1, 1, 0, 0, 0, 0, 0, 0, // manzu
+      0, 1, 0, 1, 1, 0, 2, 0, 1, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      1, 0, 1, 0, 3, 0, 0        // jihai
+  };
+
+  decltype(make_tile_limits()) tile_limits{};
+
+  std::copy(hand.cbegin(), hand.cend(), tile_limits.begin());
+
+  const auto shanten = calc_shanten(hand, tile_limits, 4, true);
+
+  EXPECT_FALSE(shanten.has_value());
+}
+
 TEST(CalcShantenTest, InsufficientBlocks4433)
 {
   // 11112222333444z

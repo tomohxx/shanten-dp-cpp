@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace mahjong::experimental {
-  constexpr int8_t MAX_SHT = 14;
+  constexpr int8_t MAX_SHT = 100;
 
   void chmin(int8_t& x, const int8_t& y)
   {
@@ -40,7 +40,7 @@ namespace mahjong::experimental {
       array<array<array<array<array<int8_t, 5>, 2>, 5>, 5>, NUM_TIDS + 1> table;
 
       std::fill(table[0][0][0][0].begin(), table[NUM_TIDS][4][4][1].end(), MAX_SHT);
-      table[0][0][0][0][0] = 0;
+      table[0][0][0][0][0] = -1;
 
       for (int n = 0; n < NUM_TIDS; ++n) {
         for (int a = 0; a <= tile_limits[n]; ++a) {
@@ -68,7 +68,7 @@ namespace mahjong::experimental {
         }
       }
 
-      return table[NUM_TIDS][0][0][1][m] - 1;
+      return table[NUM_TIDS][0][0][1][m];
     }
   }
 
@@ -79,7 +79,7 @@ namespace mahjong::experimental {
       std::array<std::array<int8_t, 8>, NUM_TIDS + 1> table;
 
       std::fill(table[0].begin(), table[NUM_TIDS].end(), MAX_SHT);
-      table[0][0] = 0;
+      table[0][0] = -1;
 
       for (int n = 0; n < NUM_TIDS; ++n) {
         for (int p = 0; p <= 7; ++p) {
@@ -97,7 +97,7 @@ namespace mahjong::experimental {
         }
       }
 
-      return table[NUM_TIDS][7] - 1;
+      return table[NUM_TIDS][7];
     }
   }
 
@@ -109,7 +109,7 @@ namespace mahjong::experimental {
       std::array<std::array<int8_t, 2>, 14> table;
 
       std::fill(table[0].begin(), table[13].end(), MAX_SHT);
-      table[0][0] = 0;
+      table[0][0] = -1;
 
       for (int n = 0; n < 13; ++n) {
         for (int p = 0; p <= 1; ++p) {
@@ -127,14 +127,14 @@ namespace mahjong::experimental {
         }
       }
 
-      return table[13][1] - 1;
+      return table[13][1];
     }
   }
 
-  int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                   const std::array<int, NUM_TIDS + 1>& tile_limits,
-                   const int m,
-                   const bool check_hand)
+  std::optional<int> calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                                  const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                  const int m,
+                                  const bool check_hand)
   {
     if (check_hand) {
       for (int i = 0; i < NUM_TIDS; ++i) {
@@ -161,7 +161,7 @@ namespace mahjong::experimental {
       chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
     }
 
-    return ret;
+    return ret == MAX_SHT ? std::nullopt : std::make_optional<int>(ret);
   }
 
   std::array<int, NUM_TIDS + 1> make_tile_limits(const bool three_player)
