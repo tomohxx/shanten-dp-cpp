@@ -43,19 +43,14 @@ namespace mahjong::experimental {
       table[0][0][0][0][0] = -1;
 
       for (int n = 0; n < NUM_TIDS; ++n) {
-        for (int a = 0; a <= tile_limits[n]; ++a) {
-          for (int b = 0; b <= tile_limits[n + 1]; ++b) {
-            for (int h = 0; h <= 1; ++h) {
-              for (int mm = 0; mm <= m; ++mm) {
-                const auto& current = table[n][a][b][h][mm];
+        for (const auto& delta : deltas[n]) {
+          for (int a = 0; a <= tile_limits[n] - delta.a; ++a) {
+            for (int b = 0; b <= std::min(tile_limits[n + 1] - delta.b, a); ++b) {
+              for (int h = 0; h <= 1 - delta.h; ++h) {
+                for (int mm = 0; mm <= m - delta.m; ++mm) {
+                  const auto& current = table[n][a][b][h][mm];
 
-                if (current == MAX_SHT) continue;
-
-                for (const auto& delta : deltas[n]) {
-                  if (a + delta.a > tile_limits[n] ||
-                      b + delta.b > tile_limits[n + 1] ||
-                      h + delta.h > 1 ||
-                      mm + delta.m > 4) continue;
+                  if (current == MAX_SHT) continue;
 
                   const int distance = a + delta.a - hand[n];
 
@@ -82,13 +77,11 @@ namespace mahjong::experimental {
       table[0][0] = -1;
 
       for (int n = 0; n < NUM_TIDS; ++n) {
-        for (int p = 0; p <= 7; ++p) {
-          const auto& current = table[n][p];
+        for (int pp = 0; pp <= std::min(tile_limits[n] / 2, 1); ++pp) {
+          for (int p = 0; p <= 7 - pp; ++p) {
+            const auto& current = table[n][p];
 
-          if (current == MAX_SHT) continue;
-
-          for (int pp = 0; pp <= 1; ++pp) {
-            if (2 * pp > tile_limits[n] || p + pp > 7) break;
+            if (current == MAX_SHT) continue;
 
             const int distance = std::max(2 * pp - hand[n], 0);
 
@@ -112,13 +105,11 @@ namespace mahjong::experimental {
       table[0][0] = -1;
 
       for (int n = 0; n < 13; ++n) {
-        for (int p = 0; p <= 1; ++p) {
-          const auto& current = table[n][p];
+        for (int pp = 0; pp <= std::min(tile_limits[t[n]] - 1, 1); ++pp) {
+          for (int p = 0; p <= 1 - pp; ++p) {
+            const auto& current = table[n][p];
 
-          if (current == MAX_SHT) continue;
-
-          for (int pp = 0; pp <= 1; ++pp) {
-            if (pp + 1 > tile_limits[t[n]] || p + pp > 1) break;
+            if (current == MAX_SHT) continue;
 
             const int distance = std::max(pp + 1 - hand[t[n]], 0);
 
