@@ -23,7 +23,7 @@ namespace mahjong::experimental {
       int a;
       int b;
       int c;
-      int h;
+      int p;
       int m;
     };
 
@@ -46,15 +46,15 @@ namespace mahjong::experimental {
         for (const auto& delta : deltas[n]) {
           for (int a = 0; a <= tile_limits[n] - delta.a; ++a) {
             for (int b = 0; b <= std::min(tile_limits[n + 1] - delta.b, a); ++b) {
-              for (int h = 0; h <= 1 - delta.h; ++h) {
+              for (int p = 0; p <= 1 - delta.p; ++p) {
                 for (int mm = 0; mm <= m - delta.m; ++mm) {
-                  const auto& current = table[n][a][b][h][mm];
+                  const auto& current = table[n][a][b][p][mm];
 
                   if (current == MAX_SHT) continue;
 
                   const int distance = a + delta.a - hand[n];
 
-                  chmin(table[n + 1][b + delta.b][delta.c][h + delta.h][mm + delta.m],
+                  chmin(table[n + 1][b + delta.b][delta.c][p + delta.p][mm + delta.m],
                         get_next_value(current, distance));
                 }
               }
