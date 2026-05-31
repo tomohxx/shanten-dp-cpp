@@ -125,6 +125,7 @@ namespace mahjong::experimental {
   std::optional<int> calc_shanten(const std::array<int, NUM_TIDS>& hand,
                                   const std::array<int, NUM_TIDS + 1>& tile_limits,
                                   const int m,
+                                  unsigned int mode,
                                   const bool check_hand)
   {
     if (check_hand) {
@@ -141,15 +142,26 @@ namespace mahjong::experimental {
       if (m < 0 || m > 4) {
         throw std::invalid_argument(std::format("Invalid sum of hands's melds: {}", m));
       }
+
+      if (mode == 0u || mode > 7u || (m != 4 && (mode & 1u) == 0u)) {
+        throw std::invalid_argument(std::format("Invalid caluculation mode: {}", mode));
+      }
     }
 
     auto ret = MAX_SHT;
 
-    chmin(ret, standard::calc_shanten(hand, tile_limits, m));
+    if (mode & 1u) {
+      chmin(ret, standard::calc_shanten(hand, tile_limits, m));
+    }
 
     if (m == 4) {
-      chmin(ret, seven_pairs::calc_shanten(hand, tile_limits));
-      chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
+      if (mode & 2u) {
+        chmin(ret, seven_pairs::calc_shanten(hand, tile_limits));
+      }
+
+      if (mode & 4u) {
+        chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
+      }
     }
 
     return ret == MAX_SHT ? std::nullopt : std::make_optional<int>(ret);

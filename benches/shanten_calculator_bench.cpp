@@ -46,15 +46,15 @@ void verify(const std::vector<Record>& dataset)
   const auto& tile_limits = make_tile_limits();
 
   for (const auto& [hand, standard, seven_pairs, thirteen_orphans] : dataset) {
-    if (me::standard::calc_shanten(hand, tile_limits, NUM_TILES / 3) != standard) {
+    if (me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 1u) != standard) {
       throw std::runtime_error("standard::calc_shanten validation failed");
     }
 
-    if (me::seven_pairs::calc_shanten(hand, tile_limits) != seven_pairs) {
+    if (me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 2u) != seven_pairs) {
       throw std::runtime_error("seven_pairs::calc_shanten validation failed");
     }
 
-    if (me::thirteen_orphans::calc_shanten(hand, tile_limits) != thirteen_orphans) {
+    if (me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 4u) != thirteen_orphans) {
       throw std::runtime_error("thirteen_orphans::calc_shanten validation failed");
     }
   }
@@ -96,9 +96,9 @@ void BM_CalcShanten(benchmark::State& state)
     for (const auto& record : dataset) {
       const auto& hand = std::get<0>(record);
 
-      benchmark::DoNotOptimize(me::standard::calc_shanten(hand, tile_limits, NUM_TILES / 3));
-      benchmark::DoNotOptimize(me::seven_pairs::calc_shanten(hand, tile_limits));
-      benchmark::DoNotOptimize(me::thirteen_orphans::calc_shanten(hand, tile_limits));
+      benchmark::DoNotOptimize(me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 1u));
+      benchmark::DoNotOptimize(me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 2u));
+      benchmark::DoNotOptimize(me::calc_shanten(hand, tile_limits, NUM_TILES / 3, 4u));
     }
   }
 }

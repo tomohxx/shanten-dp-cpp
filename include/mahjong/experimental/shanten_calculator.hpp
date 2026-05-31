@@ -7,25 +7,10 @@
 namespace mahjong::experimental {
   inline constexpr int NUM_TIDS = 34;
 
-  namespace standard {
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits,
-                     int m);
-  }
-
-  namespace seven_pairs {
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits);
-  }
-
-  namespace thirteen_orphans {
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits);
-  }
-
   std::optional<int> calc_shanten(const std::array<int, NUM_TIDS>& hand,
                                   const std::array<int, NUM_TIDS + 1>& tile_limits,
                                   int m,
+                                  unsigned int mode = 7u,
                                   bool check_hand = false);
 
   std::array<int, NUM_TIDS + 1> make_tile_limits(bool three_player = false);
