@@ -48,7 +48,7 @@ TEST(CalcShantenTest, InvalidHandError)
       0, 0, 0, 0, 0, 0, 0        // jihai
   };
 
-  EXPECT_THROW(calc_shanten(hand, make_tile_limits(), 4, 7u, true), std::invalid_argument);
+  EXPECT_THROW(calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true), std::invalid_argument);
 }
 
 TEST(CalcShantenError, InvalidTileLimitsError)
@@ -60,21 +60,21 @@ TEST(CalcShantenError, InvalidTileLimitsError)
       0, 0, 0, 0, 0, 0, 0        // jihai
   };
 
-  EXPECT_THROW(calc_shanten(hand, std::array<int, NUM_TIDS + 1>{}, 4, 7u, true), std::invalid_argument);
+  EXPECT_THROW(calc_shanten<int8_t>(hand, std::array<int, NUM_TIDS + 1>{}, 4, 7u, true), std::invalid_argument);
 }
 
 TEST(CalcShantenTest, InvalidMeldsError)
 {
   std::array<int, NUM_TIDS> hand = {};
 
-  EXPECT_THROW(calc_shanten(hand, make_tile_limits(), 5, 7u, true), std::invalid_argument);
+  EXPECT_THROW(calc_shanten<int8_t>(hand, make_tile_limits(), 5, 7u, true), std::invalid_argument);
 }
 
 TEST(CalcShantenTest, InvalidModeError)
 {
   std::array<int, NUM_TIDS> hand = {};
 
-  EXPECT_THROW(calc_shanten(hand, make_tile_limits(), 4, 8u, true), std::invalid_argument);
+  EXPECT_THROW(calc_shanten<int8_t>(hand, make_tile_limits(), 4, 8u, true), std::invalid_argument);
 }
 
 TEST(CalcShantenTest, ClosedHand)
@@ -87,7 +87,7 @@ TEST(CalcShantenTest, ClosedHand)
       1, 0, 1, 0, 3, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -106,7 +106,7 @@ TEST(CalcShantenTest, CannotWin)
 
   std::copy(hand.cbegin(), hand.cend(), tile_limits.begin());
 
-  const auto shanten = calc_shanten(hand, tile_limits, 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, tile_limits, 4, 7u, true);
 
   EXPECT_FALSE(shanten.has_value());
 }
@@ -121,7 +121,7 @@ TEST(CalcShantenTest, InsufficientBlocks4433)
       4, 4, 3, 3, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 1);
 }
@@ -136,7 +136,7 @@ TEST(CalcShantenTest, InsufficientBlocks4442i)
       4, 4, 4, 0, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -151,7 +151,7 @@ TEST(CalcShantenTest, InsufficientBlocks4442ii)
       4, 4, 4, 0, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -166,7 +166,7 @@ TEST(CalcShantenTest, InsufficientBlocks4333)
       4, 3, 3, 3, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 1);
 }
@@ -181,7 +181,7 @@ TEST(CalcShantenTest, InsufficientBlocks4432i)
       4, 4, 3, 0, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -196,7 +196,7 @@ TEST(CalcShantenTest, InsufficientBlocks4432ii)
       4, 4, 3, 0, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -211,7 +211,7 @@ TEST(CalcShantenTest, InsufficientBlocks4441)
       4, 4, 4, 1, 0, 0, 0        // jihai
   };
 
-  const auto shanten = calc_shanten(hand, make_tile_limits(), 4, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, make_tile_limits(), 4, 7u, true);
 
   EXPECT_EQ(shanten, 3);
 }
@@ -230,7 +230,7 @@ TEST(CalcShantenTest, OpenHand1)
 
   tile_limits[m2] = 0; // 2m
 
-  const auto shanten = calc_shanten(hand, tile_limits, 3, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, tile_limits, 3, 7u, true);
 
   EXPECT_EQ(shanten, 1);
 }
@@ -251,7 +251,7 @@ TEST(CalcShantenTest, OpenHand2)
   tile_limits[p9] = 1;
   tile_limits[s9] = 1;
 
-  const auto shanten = calc_shanten(hand, tile_limits, 1, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, tile_limits, 1, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -272,7 +272,7 @@ TEST(CalcShantenTest, OpenHand3)
   tile_limits[z6] = 1;
   tile_limits[z5] = 1;
 
-  const auto shanten = calc_shanten(hand, tile_limits, 1, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, tile_limits, 1, 7u, true);
 
   EXPECT_EQ(shanten, 2);
 }
@@ -293,7 +293,24 @@ TEST(CalcShantenTest, OpenHand4)
   tile_limits[z3] = 1;
   tile_limits[z6] = 1;
 
-  const auto shanten = calc_shanten(hand, tile_limits, 1, 7u, true);
+  const auto shanten = calc_shanten<int8_t>(hand, tile_limits, 1, 7u, true);
 
   EXPECT_EQ(shanten, 2);
+}
+
+TEST(CalcShantenTest, DiscardsAndWaits)
+{
+  // 123m245779p13555z
+  std::array<int, NUM_TIDS> hand = {
+      1, 1, 1, 0, 0, 0, 0, 0, 0, // manzu
+      0, 1, 0, 1, 1, 0, 2, 0, 1, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      1, 0, 1, 0, 3, 0, 0        // jihai
+  };
+
+  const auto data = calc_shanten<Data>(hand, make_tile_limits(), 4, 7u, true);
+
+  EXPECT_EQ(data->shanten, 2);
+  EXPECT_EQ(data->discards, 0b0010101'000000000'101011010'000000000);
+  EXPECT_EQ(data->waits, 0b0000101'000000000'111111111'000000000);
 }

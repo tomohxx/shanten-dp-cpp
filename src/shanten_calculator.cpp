@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <cstdint>
 #include <format>
 #include <mahjong/experimental/shanten_calculator.hpp>
 #include <stdexcept>
@@ -13,9 +12,31 @@ namespace mahjong::experimental {
     if (x > y) x = y;
   }
 
-  int8_t get_next_value(const int8_t& current, const int distance)
+  int8_t get_next_value(const int8_t& current, const int distance, const int)
   {
     return current + std::max(distance, 0);
+  }
+
+  void chmin(Data& x, const Data& y)
+  {
+    if (x.shanten > y.shanten) {
+      x.shanten = y.shanten;
+      x.discards = y.discards;
+      x.waits = y.waits;
+    }
+    else if (x.shanten == y.shanten) {
+      x.discards |= y.discards;
+      x.waits |= y.waits;
+    }
+  }
+
+  Data get_next_value(const Data& current, const int distance, const int n)
+  {
+    return {
+        static_cast<int8_t>(current.shanten + std::max(distance, 0)),
+        distance < 0 ? (current.discards | 1ull << n) : current.discards,
+        distance > 0 ? (current.waits | 1ull << n) : current.waits,
+    };
   }
 
   namespace standard {
@@ -29,18 +50,19 @@ namespace mahjong::experimental {
 
     std::array<std::vector<Delta>, NUM_TIDS> make_deltas();
 
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits,
-                     const int m)
+    template <Calculatable T>
+    T calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                   const std::array<int, NUM_TIDS + 1>& tile_limits,
+                   const int m)
     {
       static const auto deltas = make_deltas();
 
       using std::array;
 
-      array<array<array<array<array<int8_t, 5>, 2>, 5>, 5>, NUM_TIDS + 1> table;
+      array<array<array<array<array<T, 5>, 2>, 5>, 5>, NUM_TIDS + 1> table;
 
-      std::fill(table[0][0][0][0].begin(), table[NUM_TIDS][4][4][1].end(), MAX_SHT);
-      table[0][0][0][0][0] = -1;
+      std::fill(table[0][0][0][0].begin(), table[NUM_TIDS][4][4][1].end(), T(MAX_SHT));
+      table[0][0][0][0][0] = T(-1);
 
       for (int n = 0; n < NUM_TIDS; ++n) {
         for (const auto& delta : deltas[n]) {
@@ -55,7 +77,7 @@ namespace mahjong::experimental {
                   const int distance = a + delta.a - hand[n];
 
                   chmin(table[n + 1][b + delta.b][delta.c][p + delta.p][mm + delta.m],
-                        get_next_value(current, distance));
+                        get_next_value(current, distance, n));
                 }
               }
             }
@@ -68,13 +90,14 @@ namespace mahjong::experimental {
   }
 
   namespace seven_pairs {
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits)
+    template <Calculatable T>
+    T calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                   const std::array<int, NUM_TIDS + 1>& tile_limits)
     {
-      std::array<std::array<int8_t, 8>, NUM_TIDS + 1> table;
+      std::array<std::array<T, 8>, NUM_TIDS + 1> table;
 
-      std::fill(table[0].begin(), table[NUM_TIDS].end(), MAX_SHT);
-      table[0][0] = -1;
+      std::fill(table[0].begin(), table[NUM_TIDS].end(), T(MAX_SHT));
+      table[0][0] = T(-1);
 
       for (int n = 0; n < NUM_TIDS; ++n) {
         for (int pp = 0; pp <= std::min(tile_limits[n] / 2, 1); ++pp) {
@@ -85,7 +108,7 @@ namespace mahjong::experimental {
 
             const int distance = std::max(2 * pp - hand[n], 0);
 
-            chmin(table[n + 1][p + pp], get_next_value(current, distance));
+            chmin(table[n + 1][p + pp], get_next_value(current, distance, n));
           }
         }
       }
@@ -95,14 +118,15 @@ namespace mahjong::experimental {
   }
 
   namespace thirteen_orphans {
-    int calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                     const std::array<int, NUM_TIDS + 1>& tile_limits)
+    template <Calculatable T>
+    T calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                   const std::array<int, NUM_TIDS + 1>& tile_limits)
     {
       static constexpr std::array<int, 13> t = {0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33};
-      std::array<std::array<int8_t, 2>, 14> table;
+      std::array<std::array<T, 2>, 14> table;
 
-      std::fill(table[0].begin(), table[13].end(), MAX_SHT);
-      table[0][0] = -1;
+      std::fill(table[0].begin(), table[13].end(), T(MAX_SHT));
+      table[0][0] = T(-1);
 
       for (int n = 0; n < 13; ++n) {
         for (int pp = 0; pp <= std::min(tile_limits[t[n]] - 1, 1); ++pp) {
@@ -113,7 +137,7 @@ namespace mahjong::experimental {
 
             const int distance = std::max(pp + 1 - hand[t[n]], 0);
 
-            chmin(table[n + 1][p + pp], get_next_value(current, distance));
+            chmin(table[n + 1][p + pp], get_next_value(current, distance, n));
           }
         }
       }
@@ -122,11 +146,12 @@ namespace mahjong::experimental {
     }
   }
 
-  std::optional<int> calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                                  const std::array<int, NUM_TIDS + 1>& tile_limits,
-                                  const int m,
-                                  unsigned int mode,
-                                  const bool check_hand)
+  template <Calculatable T>
+  std::optional<T> calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                                const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                const int m,
+                                unsigned int mode,
+                                const bool check_hand)
   {
     if (check_hand) {
       for (int i = 0; i < NUM_TIDS; ++i) {
@@ -148,23 +173,23 @@ namespace mahjong::experimental {
       }
     }
 
-    auto ret = MAX_SHT;
+    auto ret = T(MAX_SHT);
 
     if (mode & 1u) {
-      chmin(ret, standard::calc_shanten(hand, tile_limits, m));
+      chmin(ret, standard::calc_shanten<T>(hand, tile_limits, m));
     }
 
     if (m == 4) {
       if (mode & 2u) {
-        chmin(ret, seven_pairs::calc_shanten(hand, tile_limits));
+        chmin(ret, seven_pairs::calc_shanten<T>(hand, tile_limits));
       }
 
       if (mode & 4u) {
-        chmin(ret, thirteen_orphans::calc_shanten(hand, tile_limits));
+        chmin(ret, thirteen_orphans::calc_shanten<T>(hand, tile_limits));
       }
     }
 
-    return ret == MAX_SHT ? std::nullopt : std::make_optional<int>(ret);
+    return ret == MAX_SHT ? std::nullopt : std::make_optional<T>(ret);
   }
 
   std::array<int, NUM_TIDS + 1> make_tile_limits(const bool three_player)
@@ -236,4 +261,9 @@ namespace mahjong::experimental {
         deltas_without_seq, // 7z
     };
   }
+
+  template std::optional<int8_t>
+  calc_shanten(const std::array<int, NUM_TIDS>&, const std::array<int, NUM_TIDS + 1>&, int, unsigned int, bool);
+  template std::optional<Data>
+  calc_shanten(const std::array<int, NUM_TIDS>&, const std::array<int, NUM_TIDS + 1>&, int, unsigned int, bool);
 }
