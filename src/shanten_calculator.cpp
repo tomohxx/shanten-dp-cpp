@@ -24,9 +24,7 @@ namespace mahjong::experimental {
   void chmin(Data& x, const Data& y)
   {
     if (x.shanten > y.shanten) {
-      x.shanten = y.shanten;
-      x.discards = y.discards;
-      x.waits = y.waits;
+      x = y;
     }
     else if (x.shanten == y.shanten) {
       x.discards |= y.discards;
