@@ -2,7 +2,6 @@
 #define MAHJONG_EXPERIMENTAL_SHANTEN_CALCULATOR_HPP
 
 #include <array>
-#include <concepts>
 #include <cstdint>
 #include <optional>
 
@@ -21,15 +20,17 @@ namespace mahjong::experimental {
     bool operator==(const int8_t& rhs) const { return shanten == rhs; }
   };
 
-  template <class T>
-  concept Calculatable = std::same_as<T, int8_t> || std::same_as<T, Data>;
+  std::optional<int8_t> calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                                     const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                     int m,
+                                     unsigned int mode = 7u,
+                                     bool check_hand = false);
 
-  template <Calculatable T>
-  std::optional<T> calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                                const std::array<int, NUM_TIDS + 1>& tile_limits,
-                                int m,
-                                unsigned int mode = 7u,
-                                bool check_hand = false);
+  std::optional<Data> calc_shanten2(const std::array<int, NUM_TIDS>& hand,
+                                    const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                    int m,
+                                    unsigned int mode = 7u,
+                                    bool check_hand = false);
 
   std::array<int, NUM_TIDS + 1> make_tile_limits(bool three_player = false);
 }

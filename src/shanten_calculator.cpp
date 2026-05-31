@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <concepts>
 #include <format>
 #include <mahjong/experimental/shanten_calculator.hpp>
 #include <stdexcept>
@@ -6,6 +7,9 @@
 
 namespace mahjong::experimental {
   constexpr int8_t MAX_SHT = 100;
+
+  template <class T>
+  concept Calculatable = std::same_as<T, int8_t> || std::same_as<T, Data>;
 
   void chmin(int8_t& x, const int8_t& y)
   {
@@ -147,11 +151,11 @@ namespace mahjong::experimental {
   }
 
   template <Calculatable T>
-  std::optional<T> calc_shanten(const std::array<int, NUM_TIDS>& hand,
-                                const std::array<int, NUM_TIDS + 1>& tile_limits,
-                                const int m,
-                                unsigned int mode,
-                                const bool check_hand)
+  std::optional<T> calc_shanten_impl(const std::array<int, NUM_TIDS>& hand,
+                                     const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                     const int m,
+                                     unsigned int mode,
+                                     const bool check_hand)
   {
     if (check_hand) {
       for (int i = 0; i < NUM_TIDS; ++i) {
@@ -190,6 +194,24 @@ namespace mahjong::experimental {
     }
 
     return ret == MAX_SHT ? std::nullopt : std::make_optional<T>(ret);
+  }
+
+  std::optional<int8_t> calc_shanten(const std::array<int, NUM_TIDS>& hand,
+                                     const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                     const int m,
+                                     unsigned int mode,
+                                     const bool check_hand)
+  {
+    return calc_shanten_impl<int8_t>(hand, tile_limits, m, mode, check_hand);
+  }
+
+  std::optional<Data> calc_shanten2(const std::array<int, NUM_TIDS>& hand,
+                                    const std::array<int, NUM_TIDS + 1>& tile_limits,
+                                    const int m,
+                                    unsigned int mode,
+                                    const bool check_hand)
+  {
+    return calc_shanten_impl<Data>(hand, tile_limits, m, mode, check_hand);
   }
 
   std::array<int, NUM_TIDS + 1> make_tile_limits(const bool three_player)
@@ -261,9 +283,4 @@ namespace mahjong::experimental {
         deltas_without_seq, // 7z
     };
   }
-
-  template std::optional<int8_t>
-  calc_shanten(const std::array<int, NUM_TIDS>&, const std::array<int, NUM_TIDS + 1>&, int, unsigned int, bool);
-  template std::optional<Data>
-  calc_shanten(const std::array<int, NUM_TIDS>&, const std::array<int, NUM_TIDS + 1>&, int, unsigned int, bool);
 }
