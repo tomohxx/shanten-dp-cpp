@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <concepts>
 #include <format>
 #include <mahjong/experimental/shanten_calculator.hpp>
 #include <stdexcept>
@@ -7,9 +6,6 @@
 
 namespace mahjong::experimental {
   constexpr int8_t MAX_SHT = 100;
-
-  template <class T>
-  concept Calculatable = std::same_as<T, int8_t> || std::same_as<T, Data>;
 
   void chmin(int8_t& x, const int8_t& y)
   {
@@ -52,7 +48,7 @@ namespace mahjong::experimental {
 
     std::array<std::vector<Delta>, NUM_TIDS> make_deltas();
 
-    template <Calculatable T>
+    template <class T>
     T calc_shanten(const std::array<int, NUM_TIDS>& hand,
                    const std::array<int, NUM_TIDS + 1>& tile_limits,
                    const int m)
@@ -92,7 +88,7 @@ namespace mahjong::experimental {
   }
 
   namespace seven_pairs {
-    template <Calculatable T>
+    template <class T>
     T calc_shanten(const std::array<int, NUM_TIDS>& hand,
                    const std::array<int, NUM_TIDS + 1>& tile_limits)
     {
@@ -120,7 +116,7 @@ namespace mahjong::experimental {
   }
 
   namespace thirteen_orphans {
-    template <Calculatable T>
+    template <class T>
     T calc_shanten(const std::array<int, NUM_TIDS>& hand,
                    const std::array<int, NUM_TIDS + 1>& tile_limits)
     {
@@ -148,7 +144,7 @@ namespace mahjong::experimental {
     }
   }
 
-  template <Calculatable T>
+  template <class T>
   std::optional<T> calc_shanten_impl(const std::array<int, NUM_TIDS>& hand,
                                      const std::array<int, NUM_TIDS + 1>& tile_limits,
                                      const int m,
