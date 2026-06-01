@@ -297,3 +297,20 @@ TEST(CalcShantenTest, OpenHand4)
 
   EXPECT_EQ(shanten, 2);
 }
+
+TEST(CalcShantenTest, DiscardsAndWaits)
+{
+  // 123m245779p13555z
+  std::array<int, NUM_TIDS> hand = {
+      1, 1, 1, 0, 0, 0, 0, 0, 0, // manzu
+      0, 1, 0, 1, 1, 0, 2, 0, 1, // pinzu
+      0, 0, 0, 0, 0, 0, 0, 0, 0, // souzu
+      1, 0, 1, 0, 3, 0, 0        // jihai
+  };
+
+  const auto data = calc_shanten2(hand, make_tile_limits(), 4, 7u, true);
+
+  EXPECT_EQ(data->shanten, 2);
+  EXPECT_EQ(data->discards, 0b0010101'000000000'101011010'000000000);
+  EXPECT_EQ(data->waits, 0b0000101'000000000'111111111'000000000);
+}
