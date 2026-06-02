@@ -166,7 +166,7 @@ namespace mahjong::experimental {
         throw std::invalid_argument(std::format("Invalid sum of hands's melds: {}", m));
       }
 
-      if (mode == 0u || mode > 7u || (m != 4 && (mode & 1u) == 0u)) {
+      if (mode == 0u || mode > 7u) {
         throw std::invalid_argument(std::format("Invalid caluculation mode: {}", mode));
       }
     }
