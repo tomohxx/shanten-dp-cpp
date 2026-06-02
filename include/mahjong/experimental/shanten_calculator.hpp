@@ -32,7 +32,18 @@ namespace mahjong::experimental {
                                     unsigned int mode = 7u,
                                     bool check_hand = false);
 
-  std::array<int, NUM_TIDS + 1> make_tile_limits(bool three_player = false);
+  constexpr std::array<int, NUM_TIDS + 1> make_tile_limits(bool three_player = false)
+  {
+    std::array<int, NUM_TIDS + 1> tile_limits{};
+
+    tile_limits.fill(4);
+
+    if (three_player) {
+      std::fill(tile_limits.begin() + 1, tile_limits.begin() + 8, 0);
+    }
+
+    return tile_limits;
+  }
 }
 
 #endif

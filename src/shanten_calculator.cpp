@@ -208,19 +208,6 @@ namespace mahjong::experimental {
     return calc_shanten_impl<Data>(hand, tile_limits, m, mode, check_hand);
   }
 
-  std::array<int, NUM_TIDS + 1> make_tile_limits(const bool three_player)
-  {
-    decltype(make_tile_limits()) tile_limits;
-
-    tile_limits.fill(4);
-
-    if (three_player) {
-      std::fill(&tile_limits[1], &tile_limits[8], 0);
-    }
-
-    return tile_limits;
-  }
-
   std::array<std::vector<standard::Delta>, NUM_TIDS> standard::make_deltas()
   {
     static const std::vector<standard::Delta> deltas_with_seq = {
