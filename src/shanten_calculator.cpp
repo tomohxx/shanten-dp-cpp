@@ -88,7 +88,7 @@ namespace mahjong::experimental {
   }
 
   namespace seven_pairs {
-    template <class T>
+    template <class T, bool FourTileSevenPairs>
     T calc_shanten(const std::array<int, NUM_TIDS>& hand,
                    const std::array<int, NUM_TIDS + 1>& tile_limits)
     {
@@ -98,7 +98,16 @@ namespace mahjong::experimental {
       table[0][0] = T(-1);
 
       for (int n = 0; n < NUM_TIDS; ++n) {
-        for (int pp = 0; pp <= std::min(tile_limits[n] / 2, 1); ++pp) {
+        int pp_end;
+
+        if constexpr (FourTileSevenPairs) {
+          pp_end = tile_limits[n] / 2;
+        }
+        else {
+          pp_end = tile_limits[n] >= 2 ? 1 : 0;
+        }
+
+        for (int pp = 0; pp <= pp_end; ++pp) {
           for (int p = 0; p <= 7 - pp; ++p) {
             const auto& current = table[n][p];
 
@@ -149,6 +158,7 @@ namespace mahjong::experimental {
                                      const std::array<int, NUM_TIDS + 1>& tile_limits,
                                      const int m,
                                      unsigned int mode,
+                                     const bool four_tile_seven_pairs,
                                      const bool check_hand)
   {
     if (check_hand) {
@@ -179,7 +189,12 @@ namespace mahjong::experimental {
 
     if (m == 4) {
       if (mode & 2u) {
-        chmin(ret, seven_pairs::calc_shanten<T>(hand, tile_limits));
+        if (four_tile_seven_pairs) {
+          chmin(ret, seven_pairs::calc_shanten<T, true>(hand, tile_limits));
+        }
+        else {
+          chmin(ret, seven_pairs::calc_shanten<T, false>(hand, tile_limits));
+        }
       }
 
       if (mode & 4u) {
@@ -194,18 +209,20 @@ namespace mahjong::experimental {
                                      const std::array<int, NUM_TIDS + 1>& tile_limits,
                                      const int m,
                                      unsigned int mode,
+                                     const bool four_tile_seven_pairs,
                                      const bool check_hand)
   {
-    return calc_shanten_impl<int8_t>(hand, tile_limits, m, mode, check_hand);
+    return calc_shanten_impl<int8_t>(hand, tile_limits, m, mode, four_tile_seven_pairs, check_hand);
   }
 
   std::optional<Data> calc_shanten2(const std::array<int, NUM_TIDS>& hand,
                                     const std::array<int, NUM_TIDS + 1>& tile_limits,
                                     const int m,
                                     unsigned int mode,
+                                    const bool four_tile_seven_pairs,
                                     const bool check_hand)
   {
-    return calc_shanten_impl<Data>(hand, tile_limits, m, mode, check_hand);
+    return calc_shanten_impl<Data>(hand, tile_limits, m, mode, four_tile_seven_pairs, check_hand);
   }
 
   std::array<std::vector<standard::Delta>, NUM_TIDS> standard::make_deltas()
