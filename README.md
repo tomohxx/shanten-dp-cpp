@@ -15,6 +15,7 @@ This project provides an efficient algorithm to calculate the minimum number of 
   - Supports open melds (副露に対応)
   - Supports three-player mahjong (三人麻雀に対応)
 - Supports simultaneous calculation of necessary and unnecessary tiles (有効牌・不要牌同時計算に対応)
+- Supports seven pairs with four identical tiles (四枚使い七対子に対応)
 
 ## Requirements
 

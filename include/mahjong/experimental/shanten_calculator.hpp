@@ -24,12 +24,14 @@ namespace mahjong::experimental {
                                      const std::array<int, NUM_TIDS + 1>& tile_limits,
                                      int m,
                                      unsigned int mode = 7u,
+                                     bool four_tile_seven_pairs = false,
                                      bool check_hand = false);
 
   std::optional<Data> calc_shanten2(const std::array<int, NUM_TIDS>& hand,
                                     const std::array<int, NUM_TIDS + 1>& tile_limits,
                                     int m,
                                     unsigned int mode = 7u,
+                                    bool four_tile_seven_pairs = false,
                                     bool check_hand = false);
 
   constexpr std::array<int, NUM_TIDS + 1> make_tile_limits(bool three_player = false)
