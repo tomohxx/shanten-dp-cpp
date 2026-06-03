@@ -104,7 +104,7 @@ namespace mahjong::experimental {
           pp_end = tile_limits[n] / 2;
         }
         else {
-          pp_end = tile_limits[n] >= 2 ? 1 : 0;
+          pp_end = std::min(tile_limits[n] / 2, 1);
         }
 
         for (int pp = 0; pp <= pp_end; ++pp) {
