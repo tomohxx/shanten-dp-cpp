@@ -144,12 +144,12 @@ namespace mahjong::experimental {
 
             const int distance = std::max(pp + 1 - hand[t[n]], 0);
 
-            chmin(table[n + 1][p + pp], get_next_value(current, distance, n));
+            chmin(table[n + 1][p + pp], get_next_value(current, distance, t[n]));
           }
         }
       }
 
-      return table[13][1];
+      return table[t.size()][1];
     }
   }
 
